@@ -8,7 +8,10 @@ const postsRouter = require('./routers/postRoutes.js');
 const categoriesRouter = require('./routers/categoryRoutes.js');
 const tagsRouter = require('./routers/tagRoutes.js');
 const authsRouter = require('./routers/authRoutes.js');
+const cors = require('cors');
 
+// middleware cors
+app.use(cors());
 // middleware json
 app.use(express.json());
 
