@@ -36,7 +36,7 @@ const index = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { title, image, content, categoryId, tags } = req.body;
+  const { title, image, content, categoryId, tags, userId } = req.body;
   const slug = generateSlug(title);
   const data = {
     title,
@@ -44,6 +44,12 @@ const create = async (req, res, next) => {
     image,
     content,
     published: req.body.published ? true : false,
+    // collego il post all'utente tramite userId (sarà il front-end a gestire l'id dell'utente loggato e inviarlo al back-end)
+    user: {
+      connect: {
+        id: parseInt(userId),
+      },
+    },
     tags: {
       // uso connect perchè mi serve l'id del tag
       connect: tags.map((id) => ({ id })),

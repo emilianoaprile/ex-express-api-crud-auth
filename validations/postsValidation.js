@@ -98,7 +98,27 @@ const bodyData = {
                 return true;
             }
         }
-    } 
+    },
+    userId: {
+        in: ['body'],
+        isInt: {
+            errorMessage: 'UserId deve essere un numero intero',
+            bail: true
+        },
+        // controllo se l'utente esiste
+        custom: {
+            options: async (value) => {
+                const userId = parseInt(value);
+                const user = await prisma.user.findUnique({
+                    where: {id: userId}
+                })
+                if(!user) {
+                    throw new Error(`Utente con id ${userId} non trovato`)
+                }
+                return true;
+            }
+        }
+    }
 
 }
 
