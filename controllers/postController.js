@@ -123,16 +123,17 @@ const searchPostByContent = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const { slug } = req.params;
-    const { title, image, content, categoryId, tags } = req.body;
+    const { title, image, content, categoryId, tags, userId } = req.body;
     const data = {
       title,
       slug,
       image,
       content,
       published: req.body.published ? true : false,
+      user: parseInt(userId),
       tags: {
         // uso set perchè mi serve l'id del tag
-        set: tags.map((tagId) => ({ tagId })),
+        set: tags.map((id) => ({ id })),
       },
     };
 
