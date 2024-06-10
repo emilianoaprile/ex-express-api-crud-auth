@@ -32,7 +32,33 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     try {
-        res.send('login')
+        const {email, password} = req.body;
+        const user = await prisma.user.findUnique({
+            where: {email},
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                password: true,
+            }
+        })
+
+        if (!user) {
+            throw new Error('Email o password errati', 400)
+        }
+
+        const isPasswordValid = await comparePassword(password, user.password)
+
+        if (!isPasswordValid) {
+            throw new Error('Email o password errati', 400)
+        }
+
+        const token = generateToken({
+            email: user.email,
+            name: user.name,
+        })
+
+        res.status(200).json({token, data: user})
 
     } catch (error) {
         next(error)
