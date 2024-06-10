@@ -54,11 +54,12 @@ const create = async (req, res, next) => {
       // uso connect perchè mi serve l'id del tag
       connect: tags.map((id) => ({ id })),
     },
+    category: {
+      connect: {
+        id: parseInt(categoryId),
+      },
+    }
   };
-
-  if (categoryId) {
-    data.categoryId = categoryId;
-  }
 
   try {
     const post = await prisma.post.create({
@@ -124,22 +125,28 @@ const update = async (req, res, next) => {
   try {
     const { slug } = req.params;
     const { title, image, content, categoryId, tags, userId } = req.body;
+    const newSlug = generateSlug(title);
     const data = {
       title,
-      slug,
+      slug: newSlug,
       image,
       content,
       published: req.body.published ? true : false,
-      user: parseInt(userId),
+      user: {
+        connect: {
+          id: parseInt(userId),
+        }
+      },
       tags: {
         // uso set perchè mi serve l'id del tag
         set: tags.map((id) => ({ id })),
       },
+      category: {
+        connect: {
+          id: parseInt(categoryId),
+        }
+      }
     };
-
-    if (categoryId) {
-      data.categoryId = categoryId;
-    }
 
     const post = await prisma.post.update({
       where: { slug: slug },
