@@ -4,6 +4,9 @@ const tagController = require('../controllers/tagController.js');
 const validator = require('../middlewares/validatorFunction.js');
 const {bodyData} = require('../validations/tagsValidation.js');
 const {paramID} = require('../validations/genericValidation.js');
+const authenticateToken = require('../middlewares/authTokenValidator.js');
+
+router.use(authenticateToken);
 
 
 router.post('/', validator(bodyData), tagController.create)

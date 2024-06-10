@@ -3,6 +3,9 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 const validator = require('../middlewares/validatorFunction.js');
 const {bodyData} = require('../validations/postsValidation.js');
+const authenticateToken = require('../middlewares/authTokenValidator.js');
+
+router.use(authenticateToken);
 
 
 router.post('/', validator(bodyData), postController.create)
